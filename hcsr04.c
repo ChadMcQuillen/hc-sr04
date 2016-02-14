@@ -20,7 +20,6 @@ MODULE_DESCRIPTION("Driver for HC-SR04 ultrasonic sensor");
 // Change these two lines to use differents GPIOs
 #define HCSR04_ECHO                95 // J4.32 -   PC31
 #define HCSR04_TRIGGER        91 // J4.30 -   PC27
-//#define HCSR04_TEST           5 // J4.28 -   PA5
 
 // adaptation for kernels >= 4.1.0
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,1,0)
@@ -80,8 +79,6 @@ static irqreturn_t gpio_isr(int irq, void *data)
 {
         ktime_t ktime_dummy;
 
-        //gpio_set_value(HCSR04_TEST,1);
-
         if (valid_value==0) {
                 ktime_dummy=ktime_get();
                 if (gpio_get_value(HCSR04_ECHO)==1) {
@@ -92,7 +89,6 @@ static irqreturn_t gpio_isr(int irq, void *data)
                 }
         }
 
-        //gpio_set_value(HCSR04_TEST,0);
         return IRQ_HANDLED;
 }
 
@@ -103,18 +99,6 @@ static int hcsr04_init(void)
         printk(KERN_INFO "HC-SR04 driver v0.32 initializing.\n");
 
         if (class_register(&hcsr04_class)<0) goto fail;
-
-        //rtc=gpio_request(HCSR04_TEST,"TEST");
-        //if (rtc!=0) {
-        //        printk(KERN_INFO "Error %d\n",__LINE__);
-        //        goto fail;
-        //}
-
-        //rtc=gpio_direction_output(HCSR04_TEST,0);
-        //if (rtc!=0) {
-        //        printk(KERN_INFO "Error %d\n",__LINE__);
-        //        goto fail;
-        //}
 
         rtc=gpio_request(HCSR04_TRIGGER,"TRIGGER");
         if (rtc!=0) {
