@@ -26,7 +26,7 @@ MODULE_DESCRIPTION("Driver for HC-SR04 ultrasonic sensor");
     #define  IRQF_DISABLED 0
 #endif
 
-static int gpio_irq=-1;
+static int gpio_irq = -1;
 static int valid_value = 0;
 
 static ktime_t echo_start;
@@ -46,12 +46,12 @@ static ssize_t hcsr04_value_read(struct class *class, struct class_attribute *at
         gpio_set_value(HCSR04_TRIGGER,1);
         udelay(10);
         gpio_set_value(HCSR04_TRIGGER,0);
-        valid_value=0;
+        valid_value = 0;
 
-        counter=0;
-        while (valid_value==0) {
+        counter = 0;
+        while (valid_value == 0) {
                 // Out of range
-                if (++counter>23200) {
+                if (++counter > 23200) {
                         return sprintf(buf, "%d\n", -1);;
                 }
                 udelay(1);
@@ -62,15 +62,15 @@ static ssize_t hcsr04_value_read(struct class *class, struct class_attribute *at
 
 // Sysfs definitions for hcsr04 class
 static struct class_attribute hcsr04_class_attrs[] = {
-        __ATTR(value,        S_IRUGO | S_IWUSR, hcsr04_value_read, hcsr04_value_write),
+        __ATTR(value, S_IRUGO | S_IWUSR, hcsr04_value_read, hcsr04_value_write),
         __ATTR_NULL,
 };
 
 // Name of directory created in /sys/class
 static struct class hcsr04_class = {
-        .name =                        "hcsr04",
-        .owner =                THIS_MODULE,
-        .class_attrs =        hcsr04_class_attrs,
+        .name = "hcsr04",
+        .owner = THIS_MODULE,
+        .class_attrs = hcsr04_class_attrs,
 };
 
 // Interrupt handler on ECHO signal
@@ -78,13 +78,13 @@ static irqreturn_t gpio_isr(int irq, void *data)
 {
         ktime_t ktime_dummy;
 
-        if (valid_value==0) {
-                ktime_dummy=ktime_get();
-                if (gpio_get_value(HCSR04_ECHO)==1) {
-                        echo_start=ktime_dummy;
+        if (valid_value == 0) {
+                ktime_dummy = ktime_get();
+                if (gpio_get_value(HCSR04_ECHO) == 1) {
+                        echo_start = ktime_dummy;
                 } else {
-                        echo_end=ktime_dummy;
-                        valid_value=1;
+                        echo_end = ktime_dummy;
+                        valid_value = 1;
                 }
         }
 
@@ -97,39 +97,39 @@ static int hcsr04_init(void)
         
         printk(KERN_INFO "HC-SR04 driver v0.32 initializing.\n");
 
-        if (class_register(&hcsr04_class)<0) goto fail;
+        if (class_register(&hcsr04_class) < 0) goto fail;
 
-        rtc=gpio_request(HCSR04_TRIGGER,"TRIGGER");
-        if (rtc!=0) {
-                printk(KERN_INFO "Error %d\n",__LINE__);
+        rtc = gpio_request(HCSR04_TRIGGER,"TRIGGER");
+        if (rtc != 0) {
+                printk(KERN_INFO "Error %d\n", __LINE__);
                 goto fail;
         }
 
-        rtc=gpio_request(HCSR04_ECHO,"ECHO");
-        if (rtc!=0) {
-                printk(KERN_INFO "Error %d\n",__LINE__);
+        rtc = gpio_request(HCSR04_ECHO,"ECHO");
+        if (rtc != 0) {
+                printk(KERN_INFO "Error %d\n", __LINE__);
                 goto fail;
         }
 
-        rtc=gpio_direction_output(HCSR04_TRIGGER,0);
-        if (rtc!=0) {
-                printk(KERN_INFO "Error %d\n",__LINE__);
+        rtc = gpio_direction_output(HCSR04_TRIGGER, 0);
+        if (rtc != 0) {
+                printk(KERN_INFO "Error %d\n", __LINE__);
                 goto fail;
         }
 
-        rtc=gpio_direction_input(HCSR04_ECHO);
-        if (rtc!=0) {
-                printk(KERN_INFO "Error %d\n",__LINE__);
+        rtc = gpio_direction_input(HCSR04_ECHO);
+        if (rtc != 0) {
+                printk(KERN_INFO "Error %d\n", __LINE__);
                 goto fail;
         }
 
         // http://lwn.net/Articles/532714/
-        rtc=gpio_to_irq(HCSR04_ECHO);
-        if (rtc<0) {
-                printk(KERN_INFO "Error %d\n",__LINE__);
+        rtc = gpio_to_irq(HCSR04_ECHO);
+        if (rtc < 0) {
+                printk(KERN_INFO "Error %d\n", __LINE__);
                 goto fail;
         } else {
-                gpio_irq=rtc;
+                gpio_irq = rtc;
         }
 
         rtc = request_irq(gpio_irq, gpio_isr, IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_DISABLED , "hc-sr04.trigger", NULL);
@@ -149,7 +149,7 @@ fail:
  
 static void hcsr04_exit(void)
 {
-        if (gpio_irq!=-1) {        
+        if (gpio_irq != -1) {
                 free_irq(gpio_irq, NULL);
         }
         gpio_free(HCSR04_TRIGGER);
