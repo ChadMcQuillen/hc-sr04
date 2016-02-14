@@ -57,7 +57,6 @@ static ssize_t hcsr04_value_read(struct class *class, struct class_attribute *at
                 udelay(1);
         }
         
-        //printk(KERN_INFO "Sub: %lld\n", ktime_to_us(ktime_sub(echo_end,echo_start)));
         return sprintf(buf, "%lld\n", ktime_to_us(ktime_sub(echo_end,echo_start)));;
 }
 
