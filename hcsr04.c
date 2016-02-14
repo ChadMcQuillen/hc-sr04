@@ -18,8 +18,8 @@ MODULE_AUTHOR("Sergio Tanzilli");
 MODULE_DESCRIPTION("Driver for HC-SR04 ultrasonic sensor");
 
 // Change these two lines to use differents GPIOs
-#define HCSR04_ECHO                95 // J4.32 -   PC31
-#define HCSR04_TRIGGER        91 // J4.30 -   PC27
+#define HCSR04_ECHO    24
+#define HCSR04_TRIGGER 23
 
 // adaptation for kernels >= 4.1.0
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,1,0)
