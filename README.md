@@ -6,9 +6,15 @@
 
 * http://www.modmypi.com/blog/hc-sr04-ultrasonic-range-sensor-on-the-raspberry-pi
 
+# Build Environment
+
+* https://github.com/ChadMcQuillen/docker-raspberry-pi-driver-cross-compiler
+
 # Build
 
-* Coming soon - docker file for creating a build environment to compile driver
+````
+make -C /build/linux ARCH=arm CROSS_COMPILE=$CCPREFIX M=`pwd` modules
+````
 
 # Credit
 
