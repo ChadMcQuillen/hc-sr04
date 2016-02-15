@@ -1,5 +1,16 @@
-#Linux Driver for Arietta G25 and HC-SR04 ultrasonic ranger
+# Linux Driver for Raspberry Pi and HC-SR04
 
-![Arietta G25 and HC-SR04](http://www.acmesystems.it/www/HC-SR04/hc-sr04_wiring.jpg)
+![Raspberry Pi and HC-SR04](https://www.modmypi.com/image/data/tutorials/hc-sr04/hc-sr04-tut-8.JPG)
 
-* http://www.acmesystems.it/HC-SR04
+# Wiring
+
+* http://www.modmypi.com/blog/hc-sr04-ultrasonic-range-sensor-on-the-raspberry-pi
+
+# Build
+
+* Coming soon - docker file for creating a build environment to compile driver
+
+# Credit
+
+* https://github.com/tanzilli/hc-sr04
+
